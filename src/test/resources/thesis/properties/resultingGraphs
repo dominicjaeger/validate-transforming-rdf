@@ -1,0 +1,11 @@
+Basic Data graph is:
+ {ex:b @ex:q ex:c; ex:a @ex:p ex:b; ex:c @ex:p ex:d}
+
+Basic Shapes graph is (with shortened IDs)
+ {faf @rdf:type sh:NodeShape; ex:Shape @sh:property 73c; ex:Shape @rdf:type sh:NodeShape; ex:Shape @sh:targetNode ex:c; ex:Shape @sh:targetNode ex:b; ex:Shape @sh:targetNode ex:a; 73c @sh:qualifiedMinCount "1"^^http://www.w3.org/2001/XMLSchema#integer; 73c @sh:qualifiedValueShape faf; 73c @sh:path ex:p}
+
+ Updated data
+ {ex:b @ex:p ex:c; ex:b @ex:q ex:c; ex:a @ex:p ex:b; ex:c @ex:p ex:d}
+
+ Updated shapes (with shortened IDs)
+ {c3e @sh:qualifiedMinCount "1"^^http://www.w3.org/2001/XMLSchema#integer; c3e @sh:qualifiedValueShape b4a; c3e @sh:path 90f; b4a @rdf:type sh:NodeShape; 90f @sh:alternativePath e7f; e7f @rdf:rest 9d9; e7f @rdf:first ex:p; 9d9 @rdf:rest rdf:nil; 9d9 @rdf:first ex:q; ex:Shape @sh:property c3e; ex:Shape @rdf:type sh:NodeShape; ex:Shape @sh:targetNode ex:c; ex:Shape @sh:targetNode ex:b; ex:Shape @sh:targetNode ex:a}

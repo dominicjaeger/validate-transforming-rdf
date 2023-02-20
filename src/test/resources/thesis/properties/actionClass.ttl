@@ -1,0 +1,41 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ex: <http://example.com/ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ac: <http://www.w3.org/ns/shacl/action#> .
+
+ac:Action1
+    sh:name "action" ;
+    sh:description "action with classes 1" ;
+    sh:property
+        [
+            sh:order 0 ;
+            sh:description "left side 1" ;
+            sh:class ex:classA ;
+        ] ;
+    sh:property
+        [
+            sh:order 1 ;
+            sh:description "right side 1" ;
+            sh:class ex:classB ;
+        ] ;
+.
+ac:Action2
+    sh:name "action" ;
+    sh:description "action with classes 2" ;
+    sh:property
+        [
+            sh:order 0 ;
+            sh:description "left side 2" ;
+            sh:class ex:classC ;
+        ] ;
+    sh:property
+        [
+            sh:order 1 ;
+            sh:description "right side 2" ;
+            sh:class ex:classD ;
+            sh:class ex:classE ;
+        ] ;
+.

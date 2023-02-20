@@ -1,0 +1,5 @@
+
+<https://example.com/John-Doe> a <http://example.com/DoubleShape> ;
+	<http://schema.org/age> 18 ;
+	<http://schema.org/name> "Johnny" .
+

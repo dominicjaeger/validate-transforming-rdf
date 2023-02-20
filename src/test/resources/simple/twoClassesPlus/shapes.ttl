@@ -1,0 +1,34 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ex: <http://example.com/ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:AShape sh:targetNode ex:b .
+ex:CShape sh:targetNode ex:d .
+
+ex:AShape
+    a sh:NodeShape ;
+    sh:class ex:A
+.
+ex:BShape
+    a sh:NodeShape ;
+    sh:class ex:B
+.
+ex:CShape
+    a sh:NodeShape ;
+    sh:class ex:C
+.
+ex:DorEShape
+    a sh:NodeShape ;
+    sh:or
+        (
+            [
+                sh:class ex:D ;
+            ]
+            [
+                sh:class ex:E
+            ]
+        )
+.
