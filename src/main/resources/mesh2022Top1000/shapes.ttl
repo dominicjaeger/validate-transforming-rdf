@@ -1,0 +1,28 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ex: <http://example.com/ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:hasDateCreated sh:targetClass <http://id.nlm.nih.gov/mesh/vocab#SCR_Organism> .
+# ex:hasDateCreated sh:targetSubjectsOf <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
+# ex:hasDateCreated sh:targetSubjectsOf <http://id.nlm.nih.gov/mesh/vocab#parentTreeNumber> .
+ex:hasDateCreated sh:targetNode <http://id.nlm.nih.gov/mesh/2022/A02.835.583.443> .
+
+
+ex:hasDateCreated
+    a sh:NodeShape ;
+    sh:targetClass <http://id.nlm.nih.gov/mesh/vocab#parentTreeNumber> ;
+    sh:property
+        [
+            sh:path <http://id.nlm.nih.gov/mesh/vocab#dateCreated> ;
+            sh:qualifiedValueShape [ a sh:NodeShape ] ;
+            sh:qualifiedMinCount 1 ;
+        ]
+.
+
+ex:r
+    a sh:PropertyShape ;
+    sh:path <http://id.nlm.nih.gov/mesh/vocab#parentTreeNumber> ;
+.

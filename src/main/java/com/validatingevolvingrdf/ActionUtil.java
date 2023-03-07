@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 public class ActionUtil {
 
+    // TODO make into List because actions are ordered
     public static Set<Action> parse(String actionsPath) throws FileNotFoundException {
         Scanner sc = new Scanner(new File(actionsPath));
         Set<Action> resultSet = new HashSet<>();
@@ -99,9 +100,8 @@ public class ActionUtil {
             } else {
                 /* The right side of the action  is called basicObjectProperty and chooses on which nodes the left side is applied*/
                 originalDataModel.listStatements().forEach(s -> {
-                    System.out.println("statement is " + s);
                     Property basicObjectProperty = shapesGraphNoTargets.createProperty(action.predicatePart);
-                    Property pathProperty = updatedModel.createProperty("http://www.w3.org/ns/shacl#path");
+                    Property pathProperty = shapesGraphNoTargets.createProperty("http://www.w3.org/ns/shacl#path");
                     Resource bopContent = basicObjectProperty.getRequiredProperty(pathProperty).getObject().asResource();
                     Statement oldTriple = shapesGraphNoTargets.createStatement(s.getSubject(), updatedModel.createProperty(bopContent.toString()), s.getObject());
                     Statement newTriple = shapesGraphNoTargets.createStatement(s.getSubject(), updatedModel.createProperty(action.variableExpressionPart), s.getObject());
