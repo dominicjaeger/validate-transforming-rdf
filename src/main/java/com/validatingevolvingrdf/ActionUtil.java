@@ -70,30 +70,49 @@ public class ActionUtil {
           of the evaluation (which is a set of nodes) of the right side of the action
          */
         for (Action action : actions) {
-            /* The right side of the action  is called concept and chooses on which nodes the left side is applied*/
-            Resource concept = ResourceFactory.createResource(action.concept);
-            Set<Resource> conceptHoldsForThese = new HashSet<>();
-            originalDataModel.listSubjects().forEach(resource ->
-            {
-                /* For each node in the data graph, we check if it is in the concept */
-                shapesGraphNoTargets.add(concept, targetNodeProperty, resource);
-                ShaclValidator validator = ShaclValidator.get();
-                ValidationReport report = validator.validate(shapesGraphNoTargets.getGraph(), originalDataModel.getGraph());
-                if (report.conforms()) {
-                    conceptHoldsForThese.add(resource);
+            if (action.addsAClass()) {
+                /* The right side of the action  is called concept and chooses on which nodes the left side is applied*/
+                Resource concept = ResourceFactory.createResource(action.predicatePart);
+                Set<Resource> conceptHoldsForThese = new HashSet<>();
+                originalDataModel.listSubjects().forEach(resource ->
+                {
+                    /* For each node in the data graph, we check if it is in the concept */
+                    shapesGraphNoTargets.add(concept, targetNodeProperty, resource);
+                    ValidationReport report = ShaclValidator.get().validate(shapesGraphNoTargets.getGraph(), originalDataModel.getGraph());
+                    if (report.conforms()) {
+                        conceptHoldsForThese.add(resource);
+                    }
+                    /* Always validate one node target */
+                    shapesGraphNoTargets.remove(concept, targetNodeProperty, resource);
+                });
+                /* Then we perform the actions for all nodes for which the concept holds */
+                for (Resource resource : conceptHoldsForThese) {
+                    RDFNode newNode = updatedModel.createResource(action.variableExpressionPart);
+                    Property typeProperty = ResourceFactory.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+                    if (action.actionType.equals(Action.ActionType.PLUS)) {
+                        updatedModel.add(resource, typeProperty, newNode);
+                    } else {
+                        updatedModel.remove(resource, typeProperty, newNode);
+
+                    }
                 }
-                /* Always validate one node target */
-                shapesGraphNoTargets.remove(concept, targetNodeProperty, resource);
-            });
-            /* Then we perform the actions for all nodes for which the concept holds */
-            for (Resource resource : conceptHoldsForThese) {
-                RDFNode newNode = updatedModel.createResource(action.newResource);
-                Property typeProperty = ResourceFactory.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-                if (action.actionType.equals(Action.ActionType.PLUS)) {
-                    updatedModel.add(resource, typeProperty, newNode);
-                } else {
-                    updatedModel.remove(resource, typeProperty, newNode);
-                }
+            } else {
+                /* The right side of the action  is called basicObjectProperty and chooses on which nodes the left side is applied*/
+                originalDataModel.listStatements().forEach(s -> {
+                    System.out.println("statement is " + s);
+                    Property basicObjectProperty = shapesGraphNoTargets.createProperty(action.predicatePart);
+                    Property pathProperty = updatedModel.createProperty("http://www.w3.org/ns/shacl#path");
+                    Resource bopContent = basicObjectProperty.getRequiredProperty(pathProperty).getObject().asResource();
+                    Statement oldTriple = shapesGraphNoTargets.createStatement(s.getSubject(), updatedModel.createProperty(bopContent.toString()), s.getObject());
+                    Statement newTriple = shapesGraphNoTargets.createStatement(s.getSubject(), updatedModel.createProperty(action.variableExpressionPart), s.getObject());
+                    if (originalDataModel.contains(oldTriple)) {
+                        if (action.actionType.equals(Action.ActionType.PLUS)) {
+                            updatedModel.add(newTriple);
+                        } else {
+                            updatedModel.remove(newTriple);
+                        }
+                    }
+                });
             }
         }
         return updatedModel;

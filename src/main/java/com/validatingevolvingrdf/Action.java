@@ -3,23 +3,25 @@ package com.validatingevolvingrdf;
 import static java.lang.Character.isUpperCase;
 
 public class Action {
-    enum ActionType {
-        PLUS,
-        MINUS
-    }
-    final public String newResource;
+    /**
+     * Notation from the set-builder notation for the evaluation of the action, e.g.
+     * A + phi_c is evaluated as { A(v) | v in [[phi_c]]^I}
+     * + is the actionType
+     * A is variableExpressionPart because A(v) is the variable expression
+     * phi_c is predicatePart because v in [[phi_c]]^I is the predicate of the evaluation set
+     */
+    final public String variableExpressionPart;
     final public ActionType actionType;
-    final public String concept;
-
-    public Action(String newResource, ActionType actionType, String concept) {
-        this.newResource = newResource;
+    final public String predicatePart;
+    public Action(String variableExpressionPart, ActionType actionType, String predicatePart) {
+        this.variableExpressionPart = variableExpressionPart;
         this.actionType = actionType;
-        this.concept = concept;
+        this.predicatePart = predicatePart;
     }
 
     public boolean addsAClass() {
-        int index = this.newResource.indexOf("#");
-        return isUpperCase(newResource.charAt(index+1));
+        int index = this.variableExpressionPart.indexOf("#");
+        return isUpperCase(variableExpressionPart.charAt(index + 1));
     }
 
     public boolean addsAProperty() {
@@ -28,8 +30,13 @@ public class Action {
 
     @Override
     public String toString() {
-        return newResource +
+        return variableExpressionPart +
                 (actionType.equals(ActionType.PLUS) ? " + " : " - ") +
-                concept;
+                predicatePart;
+    }
+
+    enum ActionType {
+        PLUS,
+        MINUS
     }
 }

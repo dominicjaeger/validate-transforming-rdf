@@ -2,12 +2,20 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix ex: <http://example.com/ns#> .
-@prefix sh:	<http://www.w3.org/ns/shacl#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ex:TestShape sh:targetNode ex:jacob .
-ex:TestShape sh:targetNode ex:charlie .
+ex:Shape
+    a sh:NodeShape ;
+    sh:property
+        [
+            sh:path ex:p ;
+            sh:qualifiedValueShape [ a sh:NodeShape ] ;
+            sh:qualifiedMinCount 1 ;
+        ]
+.
 
-ex:TestShape
-    sh:path ex:loves ;
-    sh:minCount 1 .
+ex:r
+    a sh:PropertyShape ;
+    sh:path ex:q ;
+.

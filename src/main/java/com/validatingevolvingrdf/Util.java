@@ -70,7 +70,7 @@ public class Util {
 
         if (updatedDataGraph != null) {
             System.out.println("Updated data graph is: ");
-            printShapesGraph(updatedDataGraph);
+            System.out.println(updatedDataGraph);
             System.out.println();
         }
 
