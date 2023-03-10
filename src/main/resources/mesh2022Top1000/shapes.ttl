@@ -5,24 +5,51 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ex:hasDateCreated sh:targetClass <http://id.nlm.nih.gov/mesh/vocab#SCR_Organism> .
-# ex:hasDateCreated sh:targetSubjectsOf <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
-# ex:hasDateCreated sh:targetSubjectsOf <http://id.nlm.nih.gov/mesh/vocab#parentTreeNumber> .
-ex:hasDateCreated sh:targetNode <http://id.nlm.nih.gov/mesh/2022/A02.835.583.443> .
+# ex:hasDateCreated sh:targetNode <http://id.nlm.nih.gov/mesh/2022/A02.835.583.443> . # Fails as expected because really not in data
+ex:hasSomeNewId sh:targetNode <http://id.nlm.nih.gov/mesh/2022/C000724148> . # This works only with the >=1 Mio file
+ex:hasSomeNewId sh:targetNode <http://id.nlm.nih.gov/mesh/2022/C000724057> . # This works only with the >=1 Mio file
+ex:hasIdC000724057 sh:targetNode <http://id.nlm.nih.gov/mesh/2022/C000724057> . # This works only with the >=1 Mio file
+#ex:hasIdC000724057 sh:targetClass <http://id.nlm.nih.gov/mesh/vocab#SCR_Chemical> . # Certainly fails as expected because we want to test the "sh:hasValue"
 
 
 ex:hasDateCreated
     a sh:NodeShape ;
-    sh:targetClass <http://id.nlm.nih.gov/mesh/vocab#parentTreeNumber> ;
     sh:property
         [
             sh:path <http://id.nlm.nih.gov/mesh/vocab#dateCreated> ;
             sh:qualifiedValueShape [ a sh:NodeShape ] ;
             sh:qualifiedMinCount 1 ;
-        ]
+        ] ;
 .
 
-ex:r
-    a sh:PropertyShape ;
-    sh:path <http://id.nlm.nih.gov/mesh/vocab#parentTreeNumber> ;
+ex:hasSomeNewId
+    a sh:NodeShape ;
+    sh:property
+        [
+            sh:path ex:id ;
+            sh:qualifiedValueShape [ a sh:NodeShape ] ;
+            sh:qualifiedMinCount 1 ;
+        ] ;
 .
+
+ex:hasIdC000724057
+    a sh:NodeShape ;
+    sh:property
+        [
+            #sh:path ex:id ;
+            sh:path <http://id.nlm.nih.gov/mesh/vocab#identifier> ;
+            sh:qualifiedValueShape
+                [
+                    a sh:NodeShape ;
+#                    sh:pattern "C000724157"; // TODO check why this does not validate
+                    sh:datatype xsd:string ;
+                ] ;
+            sh:qualifiedMinCount 1 ;
+        ] ;
+.
+
+ex:IdentifierShape
+    a sh:PropertyShape ;
+    sh:path <http://id.nlm.nih.gov/mesh/vocab#identifier> ;
+.
+

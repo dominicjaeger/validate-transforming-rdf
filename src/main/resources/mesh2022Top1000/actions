@@ -1,2 +1,1 @@
-http://example.com/ns#newTreeNumber + http://example.com/ns#r
-http://id.nlm.nih.gov/mesh/vocab#dateCreated + http://example.com/ns#r
+http://example.com/ns#id + http://example.com/ns#IdentifierShape
