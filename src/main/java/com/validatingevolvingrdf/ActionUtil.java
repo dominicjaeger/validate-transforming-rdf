@@ -56,7 +56,7 @@ public class ActionUtil {
     public static Model apply(Set<Action> actions, Model originalDataModel, Graph originalShapesGraph) {
         Model updatedModel = ModelFactory.createDefaultModel();
         /* It is important to do this first, because otherwise removing nodes does not work */
-        updatedModel.add(originalDataModel);
+        updatedModel.add(originalDataModel); // TODO Heap space here
 
 
         /* We want to remove the targets from the original shapes graph to add our own targets later */

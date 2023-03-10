@@ -5,24 +5,50 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ex:hasDateCreated sh:targetClass <http://id.nlm.nih.gov/mesh/vocab#SCR_Organism> .
 # ex:hasDateCreated sh:targetSubjectsOf <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
-# ex:hasDateCreated sh:targetSubjectsOf <http://id.nlm.nih.gov/mesh/vocab#parentTreeNumber> .
 ex:hasDateCreated sh:targetNode <http://id.nlm.nih.gov/mesh/2022/A02.835.583.443> .
-
+ex:hasSomeNewId sh:targetNode <http://id.nlm.nih.gov/mesh/2022/C000724148> .
+ex:hasIdC000724057 sh:targetNode <http://id.nlm.nih.gov/mesh/2022/C000724057> .
 
 ex:hasDateCreated
     a sh:NodeShape ;
-    sh:targetClass <http://id.nlm.nih.gov/mesh/vocab#parentTreeNumber> ;
     sh:property
         [
             sh:path <http://id.nlm.nih.gov/mesh/vocab#dateCreated> ;
             sh:qualifiedValueShape [ a sh:NodeShape ] ;
             sh:qualifiedMinCount 1 ;
-        ]
+        ] ;
 .
 
-ex:r
-    a sh:PropertyShape ;
-    sh:path <http://id.nlm.nih.gov/mesh/vocab#parentTreeNumber> ;
+ex:hasSomeNewId
+    a sh:NodeShape ;
+    sh:property
+        [
+            sh:path <http://example.com/ns#id> ;
+            sh:qualifiedValueShape
+                [
+                    a sh:NodeShape
+                ] ;
+            sh:qualifiedMinCount 1 ;
+        ] ;
 .
+
+ex:hasIdC000724057
+    a sh:NodeShape ;
+    sh:property
+        [
+            sh:path <http://example.com/ns#id> ;
+            sh:qualifiedValueShape
+                [
+                    a sh:NodeShape ;
+                    sh:hsValue "C000724158" ;
+                ] ;
+            sh:qualifiedMinCount 1 ;
+        ] ;
+.
+
+ex:IdentifierShape
+    a sh:PropertyShape ;
+    sh:path <http://id.nlm.nih.gov/mesh/vocab#identifier> ;
+.
+
