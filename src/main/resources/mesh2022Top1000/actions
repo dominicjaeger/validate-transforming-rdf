@@ -1,1 +1,1 @@
-http://example.com/ns#id + ex:IdentifierShape
+http://example.com/ns#id + http://example.com/ns#IdentifierShape
