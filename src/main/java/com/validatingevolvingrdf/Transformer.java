@@ -51,18 +51,24 @@ public class Transformer {
                     });
                 } else {
                     // TODO Implement this
+                    /**
+                     * Some constraint components declare only a single parameter.
+                     * For example sh:ClassConstraintComponent has the single parameter sh:class.
+                     * These parameters may be used multiple times in the same shape, and each value
+                     * of such a parameter declares an individual constraint.
+                     * The interpretation of such declarations is conjunction, i.e. all constraints apply.
+                     * See https://www.w3.org/TR/2017/REC-shacl-20170720/#constraints
+                     *
+                     * Thus, we do not need to use sh:and
+                     */
                     originalShapesNoTargets.listResourcesWithProperty(classProperty).forEach(subject -> {
                         NodeIterator objects = originalShapesNoTargets.listObjectsOfProperty(subject, classProperty);
                         objects.forEach(object -> {
                             if (object.asResource().equals(actionNewResource)) {
-                                // updatedShapesModel.remove(subject, classProperty, object);
-                                Resource newSubjectForOriginalObject = updatedShapesModel.createResource();
-                                updatedShapesModel.add(newSubjectForOriginalObject, classProperty, object);
-                                RDFList orList = updatedShapesModel.createList(newSubjectForOriginalObject);
-                                Resource subjectForConcept = updatedShapesModel.createResource();
-                                actionConcept.listProperties().forEach(statement -> updatedShapesModel.add(subjectForConcept, statement.getPredicate(), statement.getObject()));
-                                orList.add(subjectForConcept);
-                                updatedShapesModel.add(subject, orProperty, orList);
+                                Resource anonBetweenNotAndConcept = updatedShapesModel.createResource();
+                                final Property notProperty = ResourceFactory.createProperty("http://www.w3.org/ns/shacl#not");
+                                updatedShapesModel.add(subject, notProperty, anonBetweenNotAndConcept);
+                                actionConcept.listProperties().forEach(statement -> updatedShapesModel.add(anonBetweenNotAndConcept, statement.getPredicate(), statement.getObject()));
                             }
                         });
                     });

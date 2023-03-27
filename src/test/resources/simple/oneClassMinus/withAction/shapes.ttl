@@ -8,6 +8,9 @@
 ex:AShape sh:targetNode ex:b .
 ex:AShape
     a sh:NodeShape ;
-    sh:class ex:A ;
+    sh:class ex:AClass ;
 .
 
+ex:BShape
+    sh:class ex:BClass ;
+.

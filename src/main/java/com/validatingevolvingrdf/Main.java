@@ -14,7 +14,9 @@ import org.apache.jena.shacl.lib.ShLib;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Set;
@@ -22,6 +24,17 @@ import java.util.Set;
 public class Main {
     private final static String meshBasePath = "src/main/resources/mesh2022Top1000/";
     private final static String yagoBasePath = "src/main/resources/yago/";
+
+    /** TODO for minus: SHACL paths have no NOT. SPARQL paths do and X AND NOT Y should be OK for difference.
+     * Maybe use SHACL SPARQL for the MINUIS CASE https://www.w3.org/TR/2017/REC-shacl-20170720/#sparql-constraints-example
+     * Paper says that sh:closed should also work
+     * Maybe also some hack like with the implicit AND?
+     * @param args
+     *
+     * TODO check SPARQL CONSTRUCT for singletons/constants
+     * The graph template can contain triples with no variables (known as ground or explicit triples),
+     * and these also appear in the output RDF graph returned by the CONSTRUCT query form.
+     */
 
     public static void main(String[] args) {
         try {
@@ -80,8 +93,8 @@ public class Main {
         } else {
             System.err.println("Reports have a different result. This must not happen.");
         }
+        //        writeReports(report1, report2, System.out);
 
-        writeReports(report1, report2, System.out);
     }
 
 
@@ -120,7 +133,7 @@ public class Main {
             System.err.println("Reports have a different result. This must not happen.");
         }
 
-        writeReports(report1, report2, System.out);
+//        writeReports(report1, report2, System.out);
 
         try {
             FileOutputStream fout = new FileOutputStream("target/outputText");

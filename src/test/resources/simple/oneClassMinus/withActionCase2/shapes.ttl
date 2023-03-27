@@ -5,15 +5,15 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+ex:AShape sh:targetNode ex:b .
 ex:AShape
     a sh:NodeShape ;
-    sh:class ex:A ;
     sh:not
         [
-            sh:class ex:B ;
-        ] ;
+            sh:class ex:AClass ;
+        ]
 .
 
 ex:BShape
-    sh:class ex:B ;
+    sh:class ex:BClass ;
 .

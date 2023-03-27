@@ -11,6 +11,5 @@ ex:AShape
 .
 
 ex:BShape
-    a sh:NodeShape ;
     sh:class ex:B ;
 .
