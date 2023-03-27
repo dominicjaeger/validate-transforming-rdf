@@ -998,3 +998,8 @@
 <http://id.nlm.nih.gov/mesh/2022/A02.835.583.512.162.600> <http://www.w3.org/2000/01/rdf-schema#label> "A02.835.583.512.162.600"@en .
 <http://id.nlm.nih.gov/mesh/2022/A02.835.583.512.162> <http://id.nlm.nih.gov/mesh/vocab#parentTreeNumber> <http://id.nlm.nih.gov/mesh/2022/A02.835.583.512> .
 <http://id.nlm.nih.gov/mesh/2022/A02.835.583.512.162> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://id.nlm.nih.gov/mesh/vocab#TreeNumber> .
+
+ex:Testclass
+                       a sh:NodeShape ; \top
+                       sh:targetNode ex:a;
+.

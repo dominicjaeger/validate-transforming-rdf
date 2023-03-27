@@ -25,6 +25,8 @@ public class Transformer {
 
         Model updatedShapesModel = ModelFactory.createDefaultModel();
         updatedShapesModel.add(originalShapesModel);
+
+        // TODO apply transformations backwards!
         for (Action action : actions) {
             if (action.addsAClass()) {
                 final Property classProperty = ResourceFactory.createProperty("http://www.w3.org/ns/shacl#class");
@@ -37,6 +39,23 @@ public class Transformer {
                         objects.forEach(object -> {
                             if (object.asResource().equals(actionNewResource)) {
                                 updatedShapesModel.remove(subject, classProperty, object);
+                                Resource newSubjectForOriginalObject = updatedShapesModel.createResource();
+                                updatedShapesModel.add(newSubjectForOriginalObject, classProperty, object);
+                                RDFList orList = updatedShapesModel.createList(newSubjectForOriginalObject);
+                                Resource subjectForConcept = updatedShapesModel.createResource();
+                                actionConcept.listProperties().forEach(statement -> updatedShapesModel.add(subjectForConcept, statement.getPredicate(), statement.getObject()));
+                                orList.add(subjectForConcept);
+                                updatedShapesModel.add(subject, orProperty, orList);
+                            }
+                        });
+                    });
+                } else {
+                    // TODO Implement this
+                    originalShapesNoTargets.listResourcesWithProperty(classProperty).forEach(subject -> {
+                        NodeIterator objects = originalShapesNoTargets.listObjectsOfProperty(subject, classProperty);
+                        objects.forEach(object -> {
+                            if (object.asResource().equals(actionNewResource)) {
+                                // updatedShapesModel.remove(subject, classProperty, object);
                                 Resource newSubjectForOriginalObject = updatedShapesModel.createResource();
                                 updatedShapesModel.add(newSubjectForOriginalObject, classProperty, object);
                                 RDFList orList = updatedShapesModel.createList(newSubjectForOriginalObject);
@@ -73,6 +92,8 @@ public class Transformer {
                             });
                         });
                     });
+                } else {
+                    // TODO implement all actions
                 }
             }
         }

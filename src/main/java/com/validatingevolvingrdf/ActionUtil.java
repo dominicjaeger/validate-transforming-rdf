@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class ActionUtil {
 
-    // TODO make into List because actions are ordered
+    // TODO make into List because actions are ordered, and we need to apply them backwards like in paper
     public static Set<Action> parse(String actionsPath) throws FileNotFoundException {
         Scanner sc = new Scanner(new File(actionsPath));
         Set<Action> resultSet = new HashSet<>();
