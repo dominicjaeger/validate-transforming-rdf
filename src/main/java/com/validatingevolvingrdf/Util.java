@@ -13,6 +13,7 @@ import org.apache.jena.shacl.Shapes;
 import org.apache.jena.shacl.ValidationReport;
 import org.apache.jena.shacl.lib.ShLib;
 
+import java.util.List;
 import java.util.Set;
 
 public class Util {
@@ -36,7 +37,7 @@ public class Util {
 
 
     public static void debugPrint(Graph originalDataGraph, Graph originalShapesGraph,
-                                  Set<Action> actionSet, ValidationReport report,
+                                  List<Action> actionSet, ValidationReport report,
                                   Graph updatedDataGraph, Graph updatedShapesGraph
     ) {
         if (report != null) {

@@ -8,6 +8,7 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,7 +21,7 @@ public class TestSimpleBasicTransformation {
         Graph goalShapesGraph = RDFDataMgr.loadGraph(path + "shapesGoal.ttl");
         Graph originalShapesGraph = RDFDataMgr.loadGraph(path + "shapes.ttl");
         Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
-        Set<Action> actions = ActionUtil.parse(path + "actions");
+        List<Action> actions = ActionUtil.parse(path + "actions");
 
         Graph updatedShapesGraph = Transformer.transform(originalShapesModel, actions);
 

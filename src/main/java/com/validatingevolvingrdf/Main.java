@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 public class Main {
@@ -60,7 +61,7 @@ public class Main {
     private static void yago() throws FileNotFoundException {
         Graph originalShapesGraph = RDFDataMgr.loadGraph(yagoBasePath + "shapes.nt");
         Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
-        Set<Action> actions = ActionUtil.parse(yagoBasePath + "actions");
+        List<Action> actions = ActionUtil.parse(yagoBasePath + "actions");
         /** Print the Yago shapes using the following line */
 //        Util.debugPrint(null, yagoShapes, null,null,null, null);
 
@@ -103,7 +104,7 @@ public class Main {
         /* See License.md in the directory */
         Graph originalShapesGraph = RDFDataMgr.loadGraph(meshBasePath + "shapes.ttl");
         Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
-        Set<Action> actions = ActionUtil.parse(meshBasePath + "actions");
+        List<Action> actions = ActionUtil.parse(meshBasePath + "actions");
 
         System.out.println("Starting to load data");
         Instant startDataLoad = Instant.now();

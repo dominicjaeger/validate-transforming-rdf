@@ -7,19 +7,16 @@ import org.apache.jena.shacl.ValidationReport;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ActionUtil {
 
-    // TODO make into List because actions are ordered, and we need to apply them backwards like in paper
-    public static Set<Action> parse(String actionsPath) throws FileNotFoundException {
+    public static List<Action> parse(String actionsPath) throws FileNotFoundException {
         Scanner sc = new Scanner(new File(actionsPath));
-        Set<Action> resultSet = new HashSet<>();
+        List<Action> resultSet = new ArrayList<>();
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
             if (line.isBlank()) {
@@ -53,7 +50,7 @@ public class ActionUtil {
         return resultSet;
     }
 
-    public static Model apply(Set<Action> actions, Model originalDataModel, Graph originalShapesGraph) {
+    public static Model apply(List<Action> actions, Model originalDataModel, Graph originalShapesGraph) {
         Model updatedModel = ModelFactory.createDefaultModel();
         /* It is important to do this first, because otherwise removing nodes does not work */
         updatedModel.add(originalDataModel); // TODO Heap space here

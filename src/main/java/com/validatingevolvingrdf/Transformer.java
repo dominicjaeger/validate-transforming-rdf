@@ -1,9 +1,11 @@
 package com.validatingevolvingrdf;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.rdf.model.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -16,7 +18,7 @@ public class Transformer {
     private final static String alternativePathUri = "http://www.w3.org/ns/shacl#alternativePath";
 
 
-    public static Graph transform(Model originalShapesModel, Set<Action> actions) {
+    public static Graph transform(Model originalShapesModel, List<Action> actions) {
         Model originalShapesNoTargets = ModelFactory.createDefaultModel();
         /* For proper equality between two Property */
         Property targetNodeProperty = ResourceFactory.createProperty("http://www.w3.org/ns/shacl#targetNode");
@@ -26,7 +28,8 @@ public class Transformer {
         Model updatedShapesModel = ModelFactory.createDefaultModel();
         updatedShapesModel.add(originalShapesModel);
 
-        // TODO apply transformations backwards!
+        List<Action> shallowCopy = new ArrayList<Action>(actions);
+        Collections.reverse(shallowCopy); // TODO Test
         for (Action action : actions) {
             if (action.addsAClass()) {
                 final Property classProperty = ResourceFactory.createProperty("http://www.w3.org/ns/shacl#class");
@@ -50,7 +53,6 @@ public class Transformer {
                         });
                     });
                 } else {
-                    // TODO Implement this
                     /**
                      * Some constraint components declare only a single parameter.
                      * For example sh:ClassConstraintComponent has the single parameter sh:class.
@@ -99,7 +101,9 @@ public class Transformer {
                         });
                     });
                 } else {
-                    // TODO implement all actions
+                    String msg = "Not yet possible in a useful way, as the SHACL recommendation and Apache Jena "
+                            + "do not implement difference in property paths";
+                    throw new NotImplementedException(msg);
                 }
             }
         }

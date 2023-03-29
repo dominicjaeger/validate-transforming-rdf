@@ -12,6 +12,7 @@ import org.apache.jena.shacl.ValidationReport;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -54,7 +55,7 @@ public class TestExistsOnePropertyPlus {
     void testPostActions_hasTriple() throws FileNotFoundException {
         Graph originalDataGraph = RDFDataMgr.loadGraph(path + "data.ttl");
         Graph originalShapesGraph = RDFDataMgr.loadGraph(path + "shapes.ttl");
-        Set<Action> actions = ActionUtil.parse(path + "actions");
+        List<Action> actions = ActionUtil.parse(path + "actions");
 
         Model updatedModel = ActionUtil.apply(actions, ModelFactory.createModelForGraph(originalDataGraph), originalShapesGraph);
 
@@ -65,7 +66,7 @@ public class TestExistsOnePropertyPlus {
     void testPostActions_validates() throws FileNotFoundException {
         Graph originalDataGraph = RDFDataMgr.loadGraph(path + "data.ttl");
         Graph originalShapesGraph = RDFDataMgr.loadGraph(path + "shapes.ttl");
-        Set<Action> actions = ActionUtil.parse(path + "actions");
+        List<Action> actions = ActionUtil.parse(path + "actions");
 
         Model updatedModel = ActionUtil.apply(actions, ModelFactory.createModelForGraph(originalDataGraph), originalShapesGraph);
 
@@ -78,7 +79,7 @@ public class TestExistsOnePropertyPlus {
         Graph originalDataGraph = RDFDataMgr.loadGraph(path + "data.ttl");
         Graph originalShapesGraph = RDFDataMgr.loadGraph(path + "shapes.ttl");
         Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
-        Set<Action> actions = ActionUtil.parse(path + "actions");
+        List<Action> actions = ActionUtil.parse(path + "actions");
 
         Graph updatedShapesGraph = Transformer.transform(originalShapesModel, actions);
 

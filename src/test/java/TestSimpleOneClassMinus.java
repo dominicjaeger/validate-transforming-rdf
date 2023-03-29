@@ -13,6 +13,7 @@ import org.apache.jena.shacl.ValidationReport;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -30,7 +31,7 @@ public class TestSimpleOneClassMinus {
         Graph goalShapesGraph = RDFDataMgr.loadGraph(pathBasicTransformation + "shapesGoal.ttl");
         Graph originalShapesGraph = RDFDataMgr.loadGraph(pathBasicTransformation + "shapes.ttl");
         Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
-        Set<Action> actions = ActionUtil.parse(pathBasicTransformation + "actions");
+        List<Action> actions = ActionUtil.parse(pathBasicTransformation + "actions");
 
         Graph updatedShapesGraph = Transformer.transform(originalShapesModel, actions);
         Util.debugPrint(originalShapesGraph, originalShapesGraph,null, null, updatedShapesGraph, updatedShapesGraph);
@@ -43,7 +44,7 @@ public class TestSimpleOneClassMinus {
         Graph originalShapesGraph = RDFDataMgr.loadGraph(path + "shapes.ttl");
         Graph originalDataGraph = RDFDataMgr.loadGraph(path + "data.ttl");
 
-        Set<Action> actions = ActionUtil.parse(path + "actions");
+        List<Action> actions = ActionUtil.parse(path + "actions");
         Model updatedModel = ActionUtil.apply(actions, ModelFactory.createModelForGraph(originalDataGraph), originalShapesGraph);
 
         ShaclValidator validator = ShaclValidator.get();
@@ -57,7 +58,7 @@ public class TestSimpleOneClassMinus {
         Graph originalShapesGraph = RDFDataMgr.loadGraph(path + "shapes.ttl");
         Graph originalDataGraph = RDFDataMgr.loadGraph(path + "data.ttl");
 
-        Set<Action> actions = ActionUtil.parse(path + "actions");
+        List<Action> actions = ActionUtil.parse(path + "actions");
         Model updatedModel = ActionUtil.apply(actions, ModelFactory.createModelForGraph(originalDataGraph), originalShapesGraph);
 
         Node subject = NodeFactory.createURI("http://example.com/ns#b");
@@ -73,7 +74,7 @@ public class TestSimpleOneClassMinus {
         Graph originalDataGraph = RDFDataMgr.loadGraph(path + "data.ttl");
         Graph originalShapesGraph = RDFDataMgr.loadGraph(path + "shapes.ttl");
         Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
-        Set<Action> actions = ActionUtil.parse(path + "actions");
+        List<Action> actions = ActionUtil.parse(path + "actions");
 
         Graph updatedShapesGraph = Transformer.transform(originalShapesModel, actions);
 
@@ -98,7 +99,7 @@ public class TestSimpleOneClassMinus {
         Graph originalShapesGraph = RDFDataMgr.loadGraph(pathCase2 + "shapes.ttl");
         Graph originalDataGraph = RDFDataMgr.loadGraph(pathCase2 + "data.ttl");
 
-        Set<Action> actions = ActionUtil.parse(pathCase2 + "actions");
+        List<Action> actions = ActionUtil.parse(pathCase2 + "actions");
         Model updatedModel = ActionUtil.apply(actions, ModelFactory.createModelForGraph(originalDataGraph), originalShapesGraph);
 
         ShaclValidator validator = ShaclValidator.get();
@@ -111,7 +112,7 @@ public class TestSimpleOneClassMinus {
         Graph originalDataGraph = RDFDataMgr.loadGraph(pathCase2 + "data.ttl");
         Graph originalShapesGraph = RDFDataMgr.loadGraph(pathCase2 + "shapes.ttl");
         Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
-        Set<Action> actions = ActionUtil.parse(pathCase2 + "actions");
+        List<Action> actions = ActionUtil.parse(pathCase2 + "actions");
 
         Graph updatedShapesGraph = Transformer.transform(originalShapesModel, actions);
 
