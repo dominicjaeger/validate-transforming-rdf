@@ -13,55 +13,55 @@ import org.apache.jena.shacl.ValidationReport;
 import org.apache.jena.shacl.lib.ShLib;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 public class Main {
     private final static String meshBasePath = "src/main/resources/mesh2022Top1000/";
     private final static String yagoBasePath = "src/main/resources/yago/";
 
-    /** TODO for minus: SHACL paths have no NOT. SPARQL paths do and X AND NOT Y should be OK for difference.
+    /**
+     * TODO for minus: SHACL paths have no NOT. SPARQL paths do and X AND NOT Y should be OK for difference.
      * Maybe use SHACL SPARQL for the MINUIS CASE https://www.w3.org/TR/2017/REC-shacl-20170720/#sparql-constraints-example
      * Paper says that sh:closed should also work
      * Maybe also some hack like with the implicit AND?
-     * @param args
      *
-     * TODO check SPARQL CONSTRUCT for singletons/constants
-     * The graph template can contain triples with no variables (known as ground or explicit triples),
-     * and these also appear in the output RDF graph returned by the CONSTRUCT query form.
+     * @param args TODO check SPARQL CONSTRUCT for singletons/constants
+     *             The graph template can contain triples with no variables (known as ground or explicit triples),
+     *             and these also appear in the output RDF graph returned by the CONSTRUCT query form.
      */
 
     public static void main(String[] args) {
-        try {
-            yago();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+        if (args.length > 2) {
+            System.out.println("Using shapes graph: " + args[0]);
+            System.out.println("Using actions: " + args[1]);
+            System.out.println("Using data graph: " + args[2]);
+            try {
+                localExperiment(args[2], args[0], args[1]);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (args.length > 1) {
+            System.out.println("Using shapes graph: " + args[0]);
+            System.out.println("Using actions: " + args[1]);
+            System.out.println("Getting Yago data with SPARQL.");
+            try {
+                remoteExperiment("https://yago-knowledge.org/sparql/query", args[0], args[1]);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            System.err.println("Incorrect usage. Please check documentation.");
         }
 
-        String dataPath = meshBasePath + "data.nt";
-//        if (args.length > 0) {
-//            System.out.println("Using graph data: " + args[0]);
-//            dataPath = args[0];
-//        } else {
-//            System.out.println("Using included MeSH data with top 1000 lines");
-//        }
-//        try {
-//            mesh(dataPath);
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
-    private static void yago() throws FileNotFoundException {
-        Graph originalShapesGraph = RDFDataMgr.loadGraph(yagoBasePath + "shapes.nt");
+    private static void remoteExperiment(String queryService, String shapesPath, String actionsPath) throws FileNotFoundException {
+        Graph originalShapesGraph = RDFDataMgr.loadGraph(shapesPath);
         Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
-        List<Action> actions = ActionUtil.parse(yagoBasePath + "actions");
+        List<Action> actions = ActionUtil.parse(actionsPath);
         /** Print the Yago shapes using the following line */
 //        Util.debugPrint(null, yagoShapes, null,null,null, null);
 
@@ -69,10 +69,10 @@ public class Main {
          * Original model has 1000 statements.
          * Updated model has 1609 statements.
          */
-        Query places = QueryFactory.create("DESCRIBE ?s WHERE {?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Place> } LIMIT 1000");
-        String yagoQueryService = "https://yago-knowledge.org/sparql/query";
+        String query = "DESCRIBE ?s WHERE {?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Place> } LIMIT 1000";
+        Query places = QueryFactory.create(query);
         Model originalDataModel = ModelFactory.createDefaultModel();
-        try (RDFConnection conn = RDFConnection.connect(yagoQueryService)) {
+        try (RDFConnection conn = RDFConnection.connect(queryService)) {
             originalDataModel.add(conn.queryConstruct(places));
         }
         /** Print the retrieved statements*/
@@ -98,17 +98,14 @@ public class Main {
 
     }
 
-
-
-    private static void mesh(String dataPath) throws FileNotFoundException {
-        /* See License.md in the directory */
-        Graph originalShapesGraph = RDFDataMgr.loadGraph(meshBasePath + "shapes.ttl");
+    private static void localExperiment(String dataGraphPath, String shapesGraphPath, String actionsPath) throws FileNotFoundException {
+        Graph originalShapesGraph = RDFDataMgr.loadGraph(shapesGraphPath);
         Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
-        List<Action> actions = ActionUtil.parse(meshBasePath + "actions");
+        List<Action> actions = ActionUtil.parse(actionsPath);
 
         System.out.println("Starting to load data");
         Instant startDataLoad = Instant.now();
-        Graph originalDataGraph = RDFDataMgr.loadGraph(dataPath);
+        Graph originalDataGraph = RDFDataMgr.loadGraph(dataGraphPath);
         Instant endDataLoad = Instant.now();
         System.out.println("Time to load data into graph: " + Duration.between(startDataLoad, endDataLoad));
         Model originalDataModel = ModelFactory.createModelForGraph(originalDataGraph);
@@ -123,28 +120,27 @@ public class Main {
         System.out.println("Updated model has " + updatedModel.size() + " statements.");
         System.out.println();
 
+        Instant startTimeToTransformShapes = Instant.now();
         Graph updatedShapesGraph = Transformer.transform(originalShapesModel, actions);
+        Instant endTimeToTransformShapes = Instant.now();
+        System.out.println("Time to transform shapes: " + Duration.between(startTimeToTransformShapes, endTimeToTransformShapes));
 
         ShaclValidator validator = ShaclValidator.get();
         ValidationReport report1 = validator.validate(originalShapesGraph, updatedModel.getGraph());
+        Instant startTimeForUpdatedShapesValidation = Instant.now();
         ValidationReport report2 = validator.validate(updatedShapesGraph, originalDataGraph);
+        Instant endTimeForUpdatedShapesValidation = Instant.now();
+        System.out.println("Time to validate original data with updated shapes: " +
+                Duration.between(startTimeForUpdatedShapesValidation, endTimeForUpdatedShapesValidation));
+
+
         if (report1.conforms() == report2.conforms()) {
-            System.out.println("Both reports report the same.");
+            System.out.println("Both reports reported the same.");
         } else {
-            System.err.println("Reports have a different result. This must not happen.");
+            System.err.println("Reports had a different result. This must not happen.");
         }
 
-//        writeReports(report1, report2, System.out);
-
-        try {
-            FileOutputStream fout = new FileOutputStream("target/outputText");
-//            updatesOnly.write(fout, "TTL");
-            writeReports(report1, report2, fout);
-            fout.close();
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-
+        // writeReports(report1, report2, System.out);
     }
 
     private static void writeReports(ValidationReport originalShapesReport, ValidationReport updatedShapesReport, OutputStream out) {
