@@ -8,11 +8,11 @@ and transforms them into a modified set of constraints
 For the MeSH experiment, use
 
 ```
-java -jar -Xmx9g .\validatingevolvingrdf-0.1-jar-with-dependencies.jar "C:\Users\domin\ThesisResources\mesh\shapes.ttl" "C:\Users\domin\ThesisResources\mesh\actions" "C:\Users\domin\ThesisResources\mesh\mesh2022.nt"
+java -jar -Xmx9g .\validatingevolvingrdf-0.1-jar-with-dependencies.jar local "C:\Users\domin\ThesisResources\mesh\shapes.ttl" "C:\Users\domin\ThesisResources\mesh\actions" "C:\Users\domin\ThesisResources\mesh\mesh2022.nt"
 ```
 
 For the Yago experiment, use
 ```
-java -jar -Xmx9g .\validatingevolvingrdf-0.1-jar-with-dependencies.jar "C:\Users\domin\ThesisResources\yago\shapes.nt" "C:\Users\domin\ThesisResources\yago\actions"
+java -jar -Xmx9g .\validatingevolvingrdf-0.1-jar-with-dependencies.jar remote "C:\Users\domin\ThesisResources\yago\shapes.nt" "C:\Users\domin\ThesisResources\yago\actions" 100
 ```
 

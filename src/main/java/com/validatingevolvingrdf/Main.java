@@ -19,6 +19,7 @@ import java.time.Instant;
 import java.util.List;
 
 public class Main {
+    private final static String YAGO_QUERY_LIMIT = "10"; // Pay attention to whitespace before
     private final static String meshBasePath = "src/main/resources/mesh2022Top1000/";
     private final static String yagoBasePath = "src/main/resources/yago/";
 
@@ -34,113 +35,100 @@ public class Main {
      */
 
     public static void main(String[] args) {
-        if (args.length > 2) {
-            System.out.println("Using shapes graph: " + args[0]);
-            System.out.println("Using actions: " + args[1]);
-            System.out.println("Using data graph: " + args[2]);
-            try {
-                localExperiment(args[2], args[0], args[1]);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        } else if (args.length > 1) {
-            System.out.println("Using shapes graph: " + args[0]);
-            System.out.println("Using actions: " + args[1]);
-            System.out.println("Getting Yago data with SPARQL.");
-            try {
-                remoteExperiment("https://yago-knowledge.org/sparql/query", args[0], args[1]);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+        if (args.length > 3) {
+            String shapesPath = args[1];
+            String actionsPath = args[2];
+            System.out.println("Using shapes graph: " + shapesPath);
+            System.out.println("Using actions: " + actionsPath);
+            if ("local".equals(args[0])) {
+                String dataPath = args[3];
+                System.out.println("Using data graph: " + dataPath);
+                try {
+                    localExperiment(dataPath, shapesPath, actionsPath);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            } else if ("remote".equals(args[0])) {
+                String yagoQueryLimit = args[3];
+                System.out.println("Getting Yago data with SPARQL with LIMIT " + yagoQueryLimit + ".");
+                try {
+                    remoteExperiment("https://yago-knowledge.org/sparql/query", shapesPath, actionsPath, yagoQueryLimit);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
         } else {
-            System.err.println("Incorrect usage. Please check documentation.");
+            System.err.println("Wrong usage. Please check documentation.");
         }
-
     }
 
-    private static void remoteExperiment(String queryService, String shapesPath, String actionsPath) throws FileNotFoundException {
+    private static Model applyWithTime(List<Action> actions, Model originalDataModel, Graph originalShapesGraph) {
+        Instant startTimeToUpdateData = Instant.now();
+        Model updatedModel = ActionUtil.apply(actions, originalDataModel, originalShapesGraph);
+        Instant endTimeToUpdateData = Instant.now();
+        System.out.println("Time to update data: " + Duration.between(startTimeToUpdateData, endTimeToUpdateData));
+        System.out.println("Updated model has " + updatedModel.size() + " statements.");
+        System.out.println();
+        return updatedModel;
+    }
+
+    private static Graph transformWithTime(Model originalShapesModel, List<Action> actions) {
+        Instant startTimeToTransformShapes = Instant.now();
+        Graph updatedShapesGraph = Transformer.transform(originalShapesModel, actions);
+        Instant endTimeToTransformShapes = Instant.now();
+        System.out.println("Time to transform shapes: " + Duration.between(startTimeToTransformShapes, endTimeToTransformShapes));
+        return updatedShapesGraph;
+    }
+
+    private static void doValidation(Graph originalShapesGraph, Graph updatedShapesGraph, Graph originalDataGraph, Graph updatedDataGraph) {
+        ShaclValidator validator = ShaclValidator.get();
+        ValidationReport report1 = validator.validate(originalShapesGraph, updatedDataGraph);
+        Instant startTimeForUpdatedShapesValidation = Instant.now();
+        ValidationReport report2 = validator.validate(updatedShapesGraph, originalDataGraph);
+        Instant endTimeForUpdatedShapesValidation = Instant.now();
+        System.out.println("Time to validate original data with updated shapes: " +
+                Duration.between(startTimeForUpdatedShapesValidation, endTimeForUpdatedShapesValidation));
+        if (report1.conforms() == report2.conforms()) {
+            System.out.println("Both reports report the same.");
+        } else {
+            System.err.println("Reports have a different result. This must not happen.");
+        }
+        // writeReports(report1, report2, System.out);
+    }
+
+    private static void remoteExperiment(String queryService, String shapesPath, String actionsPath, String queryLimit) throws FileNotFoundException {
         Graph originalShapesGraph = RDFDataMgr.loadGraph(shapesPath);
         Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
         List<Action> actions = ActionUtil.parse(actionsPath);
         /** Print the Yago shapes using the following line */
 //        Util.debugPrint(null, yagoShapes, null,null,null, null);
 
-        /** E.g. for LIMIT 1000 we got
-         * Original model has 1000 statements.
-         * Updated model has 1609 statements.
-         */
-        String query = "DESCRIBE ?s WHERE {?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Place> } LIMIT 1000";
+        String query = "DESCRIBE ?s WHERE {?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Place> } LIMIT " + queryLimit;
         Query places = QueryFactory.create(query);
         Model originalDataModel = ModelFactory.createDefaultModel();
         try (RDFConnection conn = RDFConnection.connect(queryService)) {
             originalDataModel.add(conn.queryConstruct(places));
         }
-        /** Print the retrieved statements*/
-        originalDataModel.listStatements().forEach(System.out::println);
+//        originalDataModel.listStatements().forEach(System.out::println);
         System.out.println("Original model has " + originalDataModel.size() + " statements.");
 
-        Model updatedModel = ActionUtil.apply(actions, originalDataModel, originalShapesGraph);
-        System.out.println("Updated model has " + updatedModel.size() + " statements.");
-        System.out.println();
-
-        Graph updatedShapesGraph = Transformer.transform(originalShapesModel, actions);
-
-
-        ShaclValidator validator = ShaclValidator.get();
-        ValidationReport report1 = validator.validate(originalShapesGraph, updatedModel.getGraph());
-        ValidationReport report2 = validator.validate(updatedShapesGraph, originalDataModel.getGraph());
-        if (report1.conforms() == report2.conforms()) {
-            System.out.println("Both reports report the same.");
-        } else {
-            System.err.println("Reports have a different result. This must not happen.");
-        }
-        //        writeReports(report1, report2, System.out);
-
+        Model updatedModel = applyWithTime(actions, originalDataModel, originalShapesGraph);
+        Graph updatedShapesGraph = transformWithTime(originalShapesModel, actions);
+        doValidation(originalShapesGraph, updatedShapesGraph, originalDataModel.getGraph(), updatedModel.getGraph());
     }
 
     private static void localExperiment(String dataGraphPath, String shapesGraphPath, String actionsPath) throws FileNotFoundException {
         Graph originalShapesGraph = RDFDataMgr.loadGraph(shapesGraphPath);
         Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
         List<Action> actions = ActionUtil.parse(actionsPath);
-
-        System.out.println("Starting to load data");
-        Instant startDataLoad = Instant.now();
         Graph originalDataGraph = RDFDataMgr.loadGraph(dataGraphPath);
-        Instant endDataLoad = Instant.now();
-        System.out.println("Time to load data into graph: " + Duration.between(startDataLoad, endDataLoad));
+
         Model originalDataModel = ModelFactory.createModelForGraph(originalDataGraph);
         System.out.println("Original model has " + originalDataModel.size() + " statements.");
-        System.out.println();
 
-        Instant startTimeToUpdateData = Instant.now();
-        // TODO At least so far with the implementation, time grows with the number of nodes in the original graph not in the updates
-        Model updatedModel = ActionUtil.apply(actions, originalDataModel, originalShapesGraph);
-        Instant endTimeToUpdateData = Instant.now();
-        System.out.println("Time to update data: " + Duration.between(startTimeToUpdateData, endTimeToUpdateData));
-        System.out.println("Updated model has " + updatedModel.size() + " statements.");
-        System.out.println();
-
-        Instant startTimeToTransformShapes = Instant.now();
-        Graph updatedShapesGraph = Transformer.transform(originalShapesModel, actions);
-        Instant endTimeToTransformShapes = Instant.now();
-        System.out.println("Time to transform shapes: " + Duration.between(startTimeToTransformShapes, endTimeToTransformShapes));
-
-        ShaclValidator validator = ShaclValidator.get();
-        ValidationReport report1 = validator.validate(originalShapesGraph, updatedModel.getGraph());
-        Instant startTimeForUpdatedShapesValidation = Instant.now();
-        ValidationReport report2 = validator.validate(updatedShapesGraph, originalDataGraph);
-        Instant endTimeForUpdatedShapesValidation = Instant.now();
-        System.out.println("Time to validate original data with updated shapes: " +
-                Duration.between(startTimeForUpdatedShapesValidation, endTimeForUpdatedShapesValidation));
-
-
-        if (report1.conforms() == report2.conforms()) {
-            System.out.println("Both reports reported the same.");
-        } else {
-            System.err.println("Reports had a different result. This must not happen.");
-        }
-
-        // writeReports(report1, report2, System.out);
+        Model updatedModel = applyWithTime(actions, originalDataModel, originalShapesGraph);
+        Graph updatedShapesGraph = transformWithTime(originalShapesModel, actions);
+        doValidation(originalShapesGraph, updatedShapesGraph, originalDataGraph, updatedModel.getGraph());
     }
 
     private static void writeReports(ValidationReport originalShapesReport, ValidationReport updatedShapesReport, OutputStream out) {
