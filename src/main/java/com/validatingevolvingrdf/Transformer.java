@@ -29,8 +29,9 @@ public class Transformer {
         updatedShapesModel.add(originalShapesModel);
 
         List<Action> shallowCopy = new ArrayList<Action>(actions);
-        Collections.reverse(shallowCopy); // TODO Test
-        for (Action action : actions) {
+        /** Transformation needs to be in reverse order according to definition in paper */
+        Collections.reverse(shallowCopy);
+        for (Action action : shallowCopy) {
             if (action.addsAClass()) {
                 final Property classProperty = ResourceFactory.createProperty("http://www.w3.org/ns/shacl#class");
                 final Property orProperty = ResourceFactory.createProperty("http://www.w3.org/ns/shacl#or");

@@ -41,7 +41,6 @@ ex:hasIdC000724057
             sh:qualifiedValueShape
                 [
                     a sh:NodeShape ;
-#                    sh:pattern "C000724157"; // TODO check why this does not validate
                     sh:datatype xsd:string ;
                 ] ;
             sh:qualifiedMinCount 1 ;

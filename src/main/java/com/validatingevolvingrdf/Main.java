@@ -23,17 +23,6 @@ public class Main {
     private final static String meshBasePath = "src/main/resources/mesh2022Top1000/";
     private final static String yagoBasePath = "src/main/resources/yago/";
 
-    /**
-     * TODO for minus: SHACL paths have no NOT. SPARQL paths do and X AND NOT Y should be OK for difference.
-     * Maybe use SHACL SPARQL for the MINUIS CASE https://www.w3.org/TR/2017/REC-shacl-20170720/#sparql-constraints-example
-     * Paper says that sh:closed should also work
-     * Maybe also some hack like with the implicit AND?
-     *
-     * @param args TODO check SPARQL CONSTRUCT for singletons/constants
-     *             The graph template can contain triples with no variables (known as ground or explicit triples),
-     *             and these also appear in the output RDF graph returned by the CONSTRUCT query form.
-     */
-
     public static void main(String[] args) {
         if (args.length > 3) {
             String shapesPath = args[1];
