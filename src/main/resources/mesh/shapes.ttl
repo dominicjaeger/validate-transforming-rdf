@@ -36,7 +36,7 @@ ex:hasIdC000724057
     a sh:NodeShape ;
     sh:property
         [
-            #sh:path ex:id ;
+        #sh:path ex:id ;
             sh:path <http://id.nlm.nih.gov/mesh/vocab#identifier> ;
             sh:qualifiedValueShape
                 [
@@ -50,5 +50,20 @@ ex:hasIdC000724057
 ex:IdentifierShape
     a sh:PropertyShape ;
     sh:path <http://id.nlm.nih.gov/mesh/vocab#identifier> ;
+.
+
+ex:SeeAlsoShape
+    a sh:PropertyShape ;
+    sh:path <http://id.nlm.nih.gov/mesh/vocab#seeAlso> ;
+.
+
+ex:GeographicalDescriptorShape
+    a sh:NodeShape ;
+    sh:class <http://id.nlm.nih.gov/mesh/vocab#GeographicalDescriptor> ;
+.
+
+ex:GeoDescriptorShape
+    a sh:NodeShape ;
+    sh:class <http://example.com/ns#GeoDescriptor> ;
 .
 

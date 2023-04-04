@@ -1,1 +1,4 @@
-http://example.com/ns#id + http://example.com/ns#IdentifierShape
++ http://example.com/ns#id http://example.com/ns#IdentifierShape
++ http://example.com/ns#see http://example.com/ns#SeeAlsoShape
++ http://example.com/ns#GeoDescriptor http://example.com/ns#GeographicalDescriptorShape
+- http://id.nlm.nih.gov/mesh/vocab#GeographicalDescriptor http://example.com/ns#GeoDescriptorShape
