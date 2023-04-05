@@ -13,25 +13,42 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+public class TestMainAddProperty {
 
-public class TestSimpleOneClassPlus {
-    private final static String path = "src/test/resources/simple/oneClassPlus/";
+    private final static String path = "src/test/resources/main/addProperty/";
+    private final static Node subject = NodeFactory.createURI("http://example.com/ns#a");
+    private final static Node property = NodeFactory.createURI("http://example.com/ns#p");
+    private final static Node object = NodeFactory.createURI("http://example.com/ns#b");
 
+    @Test
+    void testExists() throws FileNotFoundException {
+        Graph goalShapesGraph = RDFDataMgr.loadGraph(path + "shapesGoal.ttl");
+        Graph originalShapesGraph = RDFDataMgr.loadGraph(path + "shapes.ttl");
+        Model originalShapesModel = ModelFactory.createModelForGraph(originalShapesGraph);
+        List<Action> actions = ActionUtil.parse(path + "actions");
+
+        Graph updatedShapesGraph = Transformer.transform(originalShapesModel, actions);
+
+        assertTrue(updatedShapesGraph.isIsomorphicWith(goalShapesGraph));
+    }
+
+    /**
+     * The triple will be added by the action, so it must not be there before
+     */
     @Test
     void testPreUpdate_noTriple() {
         Graph originalDataGraph = RDFDataMgr.loadGraph(path + "data.ttl");
 
-        Node subject = NodeFactory.createURI("http://example.com/ns#b");
-        Node property = NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-        Node object = NodeFactory.createURI("http://example.com/ns#A");
         assertFalse(originalDataGraph.contains(subject, property, object));
     }
 
+    /**
+     * Before the action, the shape ex:Shape does not hold for a because there is no property with p going out from a
+     */
     @Test
     void testPreUpdate_noValidation() {
         Graph originalDataGraph = RDFDataMgr.loadGraph(path + "data.ttl");
@@ -41,6 +58,9 @@ public class TestSimpleOneClassPlus {
         assertFalse(report.conforms());
     }
 
+    /**
+     * The triple must be there after the action
+     */
     @Test
     void testPostActions_hasTriple() throws FileNotFoundException {
         Graph originalDataGraph = RDFDataMgr.loadGraph(path + "data.ttl");
@@ -49,9 +69,6 @@ public class TestSimpleOneClassPlus {
 
         Model updatedModel = ActionUtil.apply(actions, ModelFactory.createModelForGraph(originalDataGraph), originalShapesGraph);
 
-        Node subject = NodeFactory.createURI("http://example.com/ns#b");
-        Node property = NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-        Node object = NodeFactory.createURI("http://example.com/ns#A");
         assertTrue(updatedModel.getGraph().contains(subject, property, object));
     }
 
@@ -77,8 +94,7 @@ public class TestSimpleOneClassPlus {
         Graph updatedShapesGraph = Transformer.transform(originalShapesModel, actions);
 
         ValidationReport report = ShaclValidator.get().validate(updatedShapesGraph, originalDataGraph);
-
         assertTrue(report.conforms());
     }
-}
 
+}

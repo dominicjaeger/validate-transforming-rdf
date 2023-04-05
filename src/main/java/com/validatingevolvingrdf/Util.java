@@ -14,7 +14,6 @@ import org.apache.jena.shacl.ValidationReport;
 import org.apache.jena.shacl.lib.ShLib;
 
 import java.util.List;
-import java.util.Set;
 
 public class Util {
 

@@ -14,17 +14,16 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestSimpleOneClassMinus {
-    private final static String path = "src/test/resources/simple/oneClassMinus/withAction/";
-    private final static String pathBasicTransformation = "src/test/resources/simple/oneClassMinus/correctShapeTransformation/";
+public class TestMainRemoveClass {
+    private final static String path = "src/test/resources/main/removeClass/underUpdates/classes/";
+    private final static String pathBasicTransformation = "src/test/resources/main/removeClass/correctTransformation/";
 
 
-    private final static String pathCase2 = "src/test/resources/simple/oneClassMinus/withActionCase2/";
+    private final static String pathCase2 = "src/test/resources/main/removeClass/underUpdates/negation/";
 
     @Test
     void testBasicTransformation() throws FileNotFoundException {
@@ -86,7 +85,7 @@ public class TestSimpleOneClassMinus {
 
     /** For case 2, only the shapes graph changed. Actions and data remain unchanged */
     @Test
-    void testPostUpdate_case2_preUpdateNotConform() throws FileNotFoundException {
+    void testPostUpdate_case2_preUpdateNotConform() {
         Graph originalShapesGraph = RDFDataMgr.loadGraph(pathCase2 + "shapes.ttl");
         Graph originalDataGraph = RDFDataMgr.loadGraph(pathCase2 + "data.ttl");
 

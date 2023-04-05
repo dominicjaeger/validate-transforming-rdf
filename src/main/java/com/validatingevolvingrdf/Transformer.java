@@ -7,7 +7,6 @@ import org.apache.jena.rdf.model.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 
 public class Transformer {
@@ -28,7 +27,7 @@ public class Transformer {
         Model updatedShapesModel = ModelFactory.createDefaultModel();
         updatedShapesModel.add(originalShapesModel);
 
-        List<Action> shallowCopy = new ArrayList<Action>(actions);
+        List<Action> shallowCopy = new ArrayList<>(actions);
         /** Transformation needs to be in reverse order according to definition in paper */
         Collections.reverse(shallowCopy);
         for (Action action : shallowCopy) {

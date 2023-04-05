@@ -19,9 +19,6 @@ import java.time.Instant;
 import java.util.List;
 
 public class Main {
-    private final static String YAGO_QUERY_LIMIT = "10"; // Pay attention to whitespace before
-    private final static String meshBasePath = "src/main/resources/mesh2022Top1000/";
-    private final static String yagoBasePath = "src/main/resources/yago/";
 
     public static void main(String[] args) {
         if (args.length > 3) {
