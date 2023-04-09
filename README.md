@@ -38,7 +38,7 @@ contains the resources that were used during the experiments.
 The [shapes graph for the Yago experiment](https://github.com/dominicjaeger/validate-transforming-rdf/blob/dev/src/main/resources/yago/shapes.nt)
 is a copy of the SHACL constraints available at the
 [Yago project page](https://yago-knowledge.org/downloads/yago-4).
-The shapes graph for the MeSH experiments and the actions are custom made.
+The shapes graph for the MeSH experiment and the actions are custom made.
 
 The data graphs are not included due to the large file sizes.
 The data graph for the MeSH experiment can be downloaded as single file at
@@ -47,3 +47,22 @@ courtesy of the U.S. National Library of Medicine.
 We query the Yago data graph using the SPARQL endpoint
 [https://yago-knowledge.org/sparql/query](https://yago-knowledge.org/sparql/query).
 
+## Test cases
+
+The directory
+[src/test/resources/main](https://github.com/dominicjaeger/validate-transforming-rdf/tree/dev/src/test/resources/main)
+contains the most important test cases.
+They display how the transformation works and check that *G* validates *(C,T)* if and only if *G<sup>α</sup>* validates *(C<sup>α</sup>,T)*.
+The folders contain four files:
+1. `actions` a sequence of updates
+2. `shapes.ttl` the original shapes graph
+3. `shapesGoal.ttl` the expected result of the transformation
+4. `data.ttl` the data graph for the test case
+
+The unit tests for these test cases are located in
+[src/test/java](https://github.com/dominicjaeger/validate-transforming-rdf/tree/dev/src/test/java).
+The most important test cases start with `TestMain...`.
+They test
+- if the transformation algorithm correctly transforms the graph from `shapes.ttl` into the expected `shapesGoal.ttl`
+- if the validation report is the same for the original data graph with the updated shapes graph as for the updated data graph with the original shapes graph
+- some additional smaller tests, like if some triples are contained in the updated data graph
