@@ -32,7 +32,7 @@ java -jar -Xmx9g .\validatingevolvingrdf-0.1-jar-with-dependencies.jar remote "C
 ## Main algorithms
 
 The algorithms are in the directory
-[src/main/java/com/validatingevolvingrdf](https://github.com/dominicjaeger/validate-transforming-rdf/tree/dev/src/main/java/com/validatingevolvingrdf).
+[src/main/java/com/validatingevolvingrdf](https://github.com/dominicjaeger/validate-transforming-rdf/tree/main/src/main/java/com/validatingevolvingrdf).
 In this folder,
 - [Transformer.java](https://github.com/dominicjaeger/validate-transforming-rdf/blob/dev/src/main/java/com/validatingevolvingrdf/Transformer.java) contains the main transformation algorithm
 - [ActionUtil.java](https://github.com/dominicjaeger/validate-transforming-rdf/blob/dev/src/main/java/com/validatingevolvingrdf/ActionUtil.java) contains the parser for the action files as well as the algorithm to apply actions to a data graph
@@ -42,7 +42,7 @@ In this folder,
 ## Resources
 
 The directory
-[src/main/resources](https://github.com/dominicjaeger/validate-transforming-rdf/tree/dev/src/main/resources)
+[src/main/resources](https://github.com/dominicjaeger/validate-transforming-rdf/tree/main/src/main/resources)
 contains the resources that were used during the experiments.
 
 The [shapes graph for the Yago experiment](https://github.com/dominicjaeger/validate-transforming-rdf/blob/dev/src/main/resources/yago/shapes.nt)
@@ -60,7 +60,7 @@ We query the Yago data graph using the SPARQL endpoint
 ## Test cases
 
 The directory
-[src/test/resources/main](https://github.com/dominicjaeger/validate-transforming-rdf/tree/dev/src/test/resources/main)
+[src/test/resources/main](https://github.com/dominicjaeger/validate-transforming-rdf/tree/main/src/test/resources/main)
 contains the most important test cases.
 They display how the transformation works and check that *G* validates *(C,T)* if and only if *G<sup>α</sup>* validates *(C<sup>α</sup>,T)*.
 The folders contain four files:
@@ -70,7 +70,7 @@ The folders contain four files:
 4. `data.ttl` the data graph for the test case
 
 The unit tests for these test cases are located in
-[src/test/java](https://github.com/dominicjaeger/validate-transforming-rdf/tree/dev/src/test/java).
+[src/test/java](https://github.com/dominicjaeger/validate-transforming-rdf/tree/main/src/test/java).
 The most important test cases start with `TestMain...`.
 They test
 - if the transformation algorithm correctly transforms the graph from `shapes.ttl` into the expected `shapesGoal.ttl`
