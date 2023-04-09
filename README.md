@@ -5,7 +5,7 @@ a set of SHACL constraints
 and a sequence of actions
 and transforms them into a modified set of constraints.
 
-## Experiments
+## Usage
 
 Each experiment requires three command-line arguments
 <ol>
@@ -28,6 +28,16 @@ For the Yago experiment, use
 ```
 java -jar -Xmx9g .\validatingevolvingrdf-0.1-jar-with-dependencies.jar remote "C:\Users\domin\ThesisResources\yago\shapes.nt" "C:\Users\domin\ThesisResources\yago\actions" 100
 ```
+
+## Main algorithms
+
+The algorithms are in the directory
+[src/main/java/com/validatingevolvingrdf](https://github.com/dominicjaeger/validate-transforming-rdf/tree/dev/src/main/java/com/validatingevolvingrdf).
+In this folder,
+- [Transformer.java](https://github.com/dominicjaeger/validate-transforming-rdf/blob/dev/src/main/java/com/validatingevolvingrdf/Transformer.java) contains the main transformation algorithm
+- [ActionUtil.java](https://github.com/dominicjaeger/validate-transforming-rdf/blob/dev/src/main/java/com/validatingevolvingrdf/ActionUtil.java) contains the parser for the action files as well as the algorithm to apply actions to a data graph
+- [Main.java](https://github.com/dominicjaeger/validate-transforming-rdf/blob/dev/src/main/java/com/validatingevolvingrdf/Main.java) contains the code that performs local experiments (MeSH) and remote experiments (using the Yago SPARQL endpoint).
+
 
 ## Resources
 
