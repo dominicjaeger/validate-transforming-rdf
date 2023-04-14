@@ -1,0 +1,21 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ex: <http://example.com/ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+ex:shape sh:targetNode ex:a .
+
+ex:shape
+    a sh:NodeShape ;
+    sh:closed true ;
+    sh:property
+        [
+            sh:path ex:p ;
+            sh:qualifiedValueShape [ a ex:B ] ;
+            sh:qualifiedMinCount 1 ;
+        ]
+.
+
+ex:r
+    a sh:PropertyShape ;
+    sh:path ex:q ;
+.

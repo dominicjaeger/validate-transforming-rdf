@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 
 public class Transformer {
     private final static String propertyUri = "http://www.w3.org/ns/shacl#property";
+    private final static String closedUri = "http://www.w3.org/ns/shacl#closed";
 
 
     private final static String pathUri = "http://www.w3.org/ns/shacl#path";
@@ -80,8 +81,8 @@ public class Transformer {
                 final Property altPathProperty = ResourceFactory.createProperty(alternativePathUri);
                 Resource basicObjectProperty = originalShapesNoTargets.createResource(action.predicatePart);
                 Resource actionNewResource = originalShapesNoTargets.createResource(action.variableExpressionPart);
+                final Property propertyProperty = ResourceFactory.createProperty(propertyUri);
                 if (action.actionType.equals(Action.ActionType.PLUS)) {
-                    final Property propertyProperty = ResourceFactory.createProperty(propertyUri);
                     originalShapesNoTargets.listResourcesWithProperty(propertyProperty).forEach(shapeBeforeProperty -> {
                         NodeIterator afterPropertyIt = originalShapesNoTargets.listObjectsOfProperty(shapeBeforeProperty, propertyProperty);
                         afterPropertyIt.forEach(afterPropertyNode -> {
@@ -101,9 +102,12 @@ public class Transformer {
                         });
                     });
                 } else {
-                    String msg = "Not yet possible in a useful way, as the SHACL recommendation and Apache Jena "
-                            + "do not implement difference in property paths";
-                    throw new NotImplementedException(msg);
+                    /** This is a prototype and covers only selected cases */
+                    originalShapesNoTargets.listResourcesWithProperty(propertyProperty).forEach(shapeBeforeProperty -> {
+                        final Property closedProperty = ResourceFactory.createProperty(closedUri);
+                        Statement closed = updatedShapesModel.createLiteralStatement(shapeBeforeProperty, closedProperty, true);
+                        updatedShapesModel.add(closed);
+                    });
                 }
             }
         }

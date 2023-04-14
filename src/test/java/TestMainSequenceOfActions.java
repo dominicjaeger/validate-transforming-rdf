@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * 1)two actions and
  * 2) an action with a concept on the right side that is not just a class
  */
-public class TestMainSequenceOfAcctions {
+public class TestMainSequenceOfActions {
     private final static String path = "src/test/resources/main/sequenceOfActions/";
 
 
