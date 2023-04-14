@@ -29,12 +29,12 @@ which will place the results in the subfolder `target`
 For the Medical Subject Headings (MeSH) experiment, use
 
 ```
-java -jar -Xmx9g .\validatingevolvingrdf-0.1-jar-with-dependencies.jar local "C:\Users\domin\ThesisResources\mesh\shapes.ttl" "C:\Users\domin\ThesisResources\mesh\actions" "C:\Users\domin\ThesisResources\mesh\mesh2022.nt"
+java -jar -Xmx9g .\validatingevolvingrdf-0.2-jar-with-dependencies.jar local <pathToShapes> <pathToActions> <pathToDataGraph>
 ```
 
 For the Yago experiment, use
 ```
-java -jar -Xmx9g .\validatingevolvingrdf-0.1-jar-with-dependencies.jar remote "C:\Users\domin\ThesisResources\yago\shapes.nt" "C:\Users\domin\ThesisResources\yago\actions" 100
+java -jar -Xmx9g .\validatingevolvingrdf-0.2-jar-with-dependencies.jar remote <pathToShapes> <pathToActions> 1000
 ```
 
 ## Main algorithms
