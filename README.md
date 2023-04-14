@@ -84,3 +84,6 @@ They test
 - if the transformation algorithm correctly transforms the graph from `shapes.ttl` into the expected `shapesGoal.ttl`
 - if the validation report is the same for the original data graph with the updated shapes graph as for the updated data graph with the original shapes graph
 - some additional smaller tests, like if some triples are contained in the updated data graph
+
+Tests are automatically executed whenever a push to the repository happens.
+The results can be seen in the [GitHub Actions](https://github.com/dominicjaeger/validate-transforming-rdf/actions).
