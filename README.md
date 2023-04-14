@@ -26,7 +26,9 @@ mvn package
 ```
 which will place the results in the subfolder `target`
 
-For the Medical Subject Headings (MeSH) experiment, use
+For the Medical Subject Headings (MeSH) experiment, first download the data graph from
+[https://nlmpubs.nlm.nih.gov/projects/mesh/rdf/2022/mesh2022.nt](https://nlmpubs.nlm.nih.gov/projects/mesh/rdf/2022/mesh2022.nt) (Courtesy of the U.S. National Library of Medicine), then
+use
 
 ```
 java -jar -Xmx9g .\validatingevolvingrdf-0.2-jar-with-dependencies.jar local <pathToShapes> <pathToActions> <pathToDataGraph>
