@@ -26,7 +26,7 @@ public class TestMainSequenceOfActions {
 
 
     @Test
-    void testPostActions_hasTriple() throws FileNotFoundException {
+    void testPostActions_hasTriple1() throws FileNotFoundException {
         Graph originalDataGraph = RDFDataMgr.loadGraph(path + "data.ttl");
         Graph originalShapesGraph = RDFDataMgr.loadGraph(path + "shapes.ttl");
         List<Action> actions = ActionUtil.parse(path + "actions");
@@ -36,6 +36,21 @@ public class TestMainSequenceOfActions {
         Node subject = NodeFactory.createURI("http://example.com/ns#d");
         Node property = NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
         Node object = NodeFactory.createURI("http://example.com/ns#C");
+
+        assertTrue(updatedModel.getGraph().contains(subject, property, object));
+    }
+
+    @Test
+    void testPostActions_hasTriple2() throws FileNotFoundException {
+        Graph originalDataGraph = RDFDataMgr.loadGraph(path + "data.ttl");
+        Graph originalShapesGraph = RDFDataMgr.loadGraph(path + "shapes.ttl");
+        List<Action> actions = ActionUtil.parse(path + "actions");
+
+        Model updatedModel = ActionUtil.apply(actions, ModelFactory.createModelForGraph(originalDataGraph), originalShapesGraph);
+
+        Node subject = NodeFactory.createURI("http://example.com/ns#b");
+        Node property = NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+        Node object = NodeFactory.createURI("http://example.com/ns#A");
 
         assertTrue(updatedModel.getGraph().contains(subject, property, object));
     }
