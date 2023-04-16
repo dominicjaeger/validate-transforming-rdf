@@ -5,6 +5,12 @@ a set of SHACL constraints
 and a sequence of actions
 and transforms them into a modified set of constraints.
 
+See all released versions in the [Releases Overview](https://github.com/dominicjaeger/validate-transforming-rdf/releases)
+or download the executable and the related data (excluding MeSH data)
+[directly](https://github.com/dominicjaeger/validate-transforming-rdf/releases/download/v0.2/validatingevolvingrdf-0.2.zip).
+
+Get the MeSH data from https://nlmpubs.nlm.nih.gov/projects/mesh/rdf/2022/mesh2022.nt (Courtesy of the U.S. National Library of Medicine).
+
 ## Usage
 
 Each experiment requires multiple command-line arguments
