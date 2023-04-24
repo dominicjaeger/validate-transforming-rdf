@@ -91,4 +91,15 @@ public class TestValidatorUsage {
         ValidationReport report = ShaclValidator.get().validate(goalShapesGraph, originalDataGraph);
         assertTrue(report.conforms());
     }
+
+    /** It is not possible to use properties as target */
+    @Test
+    void testPropertiesAsTarget() {
+        String pathPropertiesAsTarget = "src/test/resources/validatorUsage/propertiesAsTarget/";
+        Graph originalDataGraph = RDFDataMgr.loadGraph(pathPropertiesAsTarget + "data.ttl");
+        Graph goalShapesGraph = RDFDataMgr.loadGraph(pathPropertiesAsTarget + "shapes.ttl");
+
+        ValidationReport report = ShaclValidator.get().validate(goalShapesGraph, originalDataGraph);
+        assertTrue(report.conforms());
+    }
 }
