@@ -7,7 +7,7 @@ and transforms them into a modified set of constraints.
 
 See all released versions in the [Releases Overview](https://github.com/dominicjaeger/validate-transforming-rdf/releases)
 or download the executable and the related data (excluding MeSH data)
-[directly](https://github.com/dominicjaeger/validate-transforming-rdf/releases/download/v0.2/validatingevolvingrdf-0.2.zip).
+[directly](https://github.com/dominicjaeger/validate-transforming-rdf/releases/download/v0.5/validatingevolvingrdf-0.5.zip).
 
 Get the MeSH data from https://nlmpubs.nlm.nih.gov/projects/mesh/rdf/2022/mesh2022.nt (Courtesy of the U.S. National Library of Medicine).
 
@@ -37,12 +37,12 @@ For the Medical Subject Headings (MeSH) experiment, first download the data grap
 use
 
 ```
-java -jar -Xmx9g .\validatingevolvingrdf-0.2-jar-with-dependencies.jar local <pathToShapes> <pathToActions> <pathToDataGraph>
+java -jar -Xmx9g .\validatingevolvingrdf-0.5-jar-with-dependencies.jar local <pathToShapes> <pathToActions> <pathToDataGraph>
 ```
 
 For the Yago experiment, use
 ```
-java -jar -Xmx9g .\validatingevolvingrdf-0.2-jar-with-dependencies.jar remote <pathToShapes> <pathToActions> 1000
+java -jar -Xmx9g .\validatingevolvingrdf-0.5-jar-with-dependencies.jar remote <pathToShapes> <pathToActions> 1000
 ```
 
 ## Main algorithms
